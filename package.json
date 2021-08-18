@@ -1,0 +1,10 @@
+{
+  "name": "artblocks",
+  "version": "1.0.0",
+  "description": "A package for fetching on-chain ArtBlocks data.",
+  "main": "src/index.js",
+  "type": "module",
+  "dependencies": {
+    "node-fetch": "^2.6.1"
+  }
+}

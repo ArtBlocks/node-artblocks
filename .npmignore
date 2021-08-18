@@ -1,0 +1,22 @@
+# Dependency directories
+node_modules/
+
+# Logs
+*.log
+
+# Optional npm cache directory
+.npm
+
+# Coverage coverage
+coverage
+*.lcov
+
+# Envirment variables
+.env
+
+# Various operating systems
+.Trash-*
+.DS_Store
+.directory
+.nfs*
+.fuse_hidden*
