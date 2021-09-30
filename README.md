@@ -153,7 +153,7 @@ Promise {
 ### Token Generator
 
 ```javascript
-const response = token_generator(0)
+const response = artblocks.token_generator(0)
 ```
 
 ```javascript
