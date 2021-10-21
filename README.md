@@ -4,6 +4,10 @@ An open source node package for reading on-chain Art Blocks data and recreating 
 
 ## Installation
 
+```bash
+npm install https://github.com/ArtBlocks/node-artblocks
+```
+
 This package is in *alpha development*. Once the methods become more stable it will be submitted to npm. In the meantime, download and install locally.
 
 ```bash
