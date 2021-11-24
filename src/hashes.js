@@ -7,8 +7,8 @@
 // V2 - { hash: hash_1, ...}
 //
 // This may change again with future contract versions
-function hash(project_id, token_id, token_hash) {
-  if (project_id < 3) {
+function hash(contract, token_id, token_hash) {
+  if (contract == "0x059edd72cd353df5106d2b9cc5ab83a52287ac3a") {
     return `let tokenData = {"hashes":["${token_hash}"], "tokenId":"${token_id}"}`
   } else {
     return `let tokenData = {"hash":"${token_hash}", "tokenId":"${token_id}"}`
