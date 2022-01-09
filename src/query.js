@@ -2,21 +2,12 @@ import utils from './utils.js'
 import graph from './graph.js'
 import build from './build.js'
 import hashes from './hashes.js'
-import versioning from './versioning.js'
-
-// Check for valid query response
-function valid_response(x) {
-  return (x !== null) && (x !== undefined) && (x.length > 0)
-}
-
-// The Graph does not currently support filtering on nested properties
-function valid_contract(project, contracts) {
-  return contracts.includes(project.contract.id)
-}
+import filter from './filter.js'
+import script from './script.js'
 
 // Query all available projects
-async function projects(subgraph, contracts) {
-  const { projects } = await graph.artblocks_subgraph(
+async function projects(subgraph, contracts, pbab) {
+  let { projects } = await graph.artblocks_subgraph(
 `{
   projects(first: 1000, orderBy: projectId) {
     projectId
@@ -29,26 +20,22 @@ async function projects(subgraph, contracts) {
 }
 `, subgraph)
 
-  // Parse data
+  projects = filter.projects_by_contracts(projects, contracts)
   let data = []
-  if (valid_response(projects)) {
-    for (let project of projects) {
-      if (valid_contract(project, contracts)) {
-        data.push({
-          id : project.projectId,
-          name : project.name,
-          artist : project.artistName,
-          contract : project.contract.id
-        })
-      }
-    }
+  for (let project of projects) {
+    data.push({
+      id : parseInt(project.projectId, 10),
+      name : project.name,
+      artist : project.artistName,
+      contract : project.contract.id
+    })
   }
-  return(data)
+  return data
 }
 
 // Query project metadata
-async function project_metadata(id, subgraph, contracts) {
-  const { projects } = await graph.artblocks_subgraph(
+async function project_metadata(id, subgraph, contracts, pbab) {
+  let { projects } = await graph.artblocks_subgraph(
 `{
   projects(where: { projectId: "${id}" }) {
     projectId
@@ -72,34 +59,29 @@ async function project_metadata(id, subgraph, contracts) {
 }
 `, subgraph)
 
-  // Parse data
   let data = {}
-  if (valid_response(projects)) {
-    let project = projects[0]
-    if (valid_contract(project, contracts)) {
-      data.id = project.projectId
-      data.name = project.name
-      data.artist = project.artistName
-      data.curation_status = project.curationStatus
-      data.description = project.description
-      data.license = project.license
-      data.website = project.website
-      data.paused = project.paused
-      data.complete = project.complete
-      data.locked = project.locked
-      data.currency_symbol = project.currencySymbol == null ? "ETH" : project.currencySymbol
-      data.price_eth = utils.wei_to_eth(parseInt(project.pricePerTokenInWei, 10))
-      data.invocations = parseInt(project.invocations, 10)
-      data.invocations_max = parseInt(project.maxInvocations, 10)
-      data.contract = project.contract.id
-    }
-  }
+  let project = filter.projects_by_contracts(projects, contracts)[0]
+  data.id = parseInt(project.projectId, 10)
+  data.name = project.name
+  data.artist = project.artistName
+  data.curation_status = project.curationStatus
+  data.description = project.description
+  data.license = project.license
+  data.website = project.website
+  data.paused = project.paused
+  data.complete = project.complete
+  data.locked = project.locked
+  data.currency_symbol = project.currencySymbol == null ? "ETH" : project.currencySymbol
+  data.price_eth = utils.wei_to_eth(parseInt(project.pricePerTokenInWei, 10))
+  data.invocations = parseInt(project.invocations, 10)
+  data.invocations_max = parseInt(project.maxInvocations, 10)
+  data.contract = project.contract.id
   return data
 }
 
 // Query project raw script
-async function project_script(id, subgraph, contracts) {
-  const { projects } = await graph.artblocks_subgraph(
+async function project_script(id, subgraph, contracts, pbab) {
+  let { projects } = await graph.artblocks_subgraph(
 `{
   projects(where: { projectId: "${id}" }) {
     projectId
@@ -114,30 +96,20 @@ async function project_script(id, subgraph, contracts) {
 }
 `, subgraph)
 
-  // Parse data
   let data = {}
-  if (valid_response(projects)) {
-    let project = projects[0]
-    if (valid_contract(project, contracts)) {
-      project.scriptJSON = JSON.parse(project.scriptJSON)
-      data.id = project.projectId
-      data.name = project.name
-      data.last_updated = project.scriptUpdatedAt
-      data.dependency = project.scriptJSON.type
-      data.dependency_version = project.scriptJSON.version
-      data.dependency_tag = versioning.dependency(project.scriptJSON.type)
-      data.interactive = project.scriptJSON.interactive
-      data.animation_length_sec = project.scriptJSON.animationLengthInSeconds
-      data.instructions = project.scriptJSON.instructions
-      data.script = project.script
-    }
-  }
+  let project = filter.projects_by_contracts(projects, contracts)[0]
+  let script_json = script.parse_json(project.scriptJSON, pbab)
+  data.id = parseInt(project.projectId, 10)
+  data.name = project.name
+  data.last_updated = project.scriptUpdatedAt
+  data.script = project.script
+  data = Object.assign({}, data, script_json)
   return data
 }
 
 // Query token metadata
-async function token_metadata(id, subgraph, contracts) {
-  const { tokens } = await graph.artblocks_subgraph(
+async function token_metadata(id, subgraph, contracts, pbab) {
+  let { tokens } = await graph.artblocks_subgraph(
 `{
   tokens(where: { tokenId: "${id}" }) {
     project {
@@ -154,24 +126,19 @@ async function token_metadata(id, subgraph, contracts) {
 }
 `, subgraph)
 
-  // Parse data
   let data = {}
-  if (valid_response(tokens)) {
-    let token = tokens[0]
-    if (valid_contract(token.project, contracts)) {
-      data.project_id = token.project.projectId
-      data.project_name = token.project.name
-      data.token_id = token.tokenId
-      data.token_invocation = token.invocation
-      data.token_hash = token.hash
-    }
-  }
+  let token = filter.tokens_by_contracts(tokens, contracts)[0]
+  data.project_id = parseInt(token.project.projectId, 10)
+  data.project_name = token.project.name
+  data.token_id = parseInt(token.tokenId, 10)
+  data.token_invocation = parseInt(token.invocation, 10)
+  data.token_hash = token.hash
   return data
 }
 
 // Query token raw script with hash and dependency tags
-async function token_script(id, subgraph, contracts) {
-  const { tokens } = await graph.artblocks_subgraph(
+async function token_script(id, subgraph, contracts, pbab) {
+  let { tokens } = await graph.artblocks_subgraph(
 `{
   tokens(where: { tokenId: "${id}"}) {
     project {
@@ -189,34 +156,27 @@ async function token_script(id, subgraph, contracts) {
 }
 `, subgraph)
 
-  // Parse data
   let data = {}
-  if (valid_response(tokens)) {
-    let token = tokens[0]
-    if (valid_contract(token.project, contracts)) {
-      token.project.scriptJSON = JSON.parse(token.project.scriptJSON)
-      data = {}
-      data.token_id = token.tokenId
-      data.token_invocation = token.invocation
-      data.token_dependencies = []
-      data.token_dependencies.push({
-        "type": "script",
-        "url": versioning.dependency(token.project.scriptJSON.type)
-      })
-      data.token_data = hashes.hash(token.project.contract.id, token.tokenId, token.hash)
-      data.token_script = token.project.script
-    }
+  let token = filter.tokens_by_contracts(tokens, contracts)[0]
+  let script_json = script.parse_json(token.project.scriptJSON, pbab)
+  data.token_id = parseInt(token.tokenId, 10)
+  data.token_invocation = parseInt(token.invocation, 10)
+  data.token_dependencies = {
+    dependency : script_json.dependency,
+    dependency_version : script_json.dependency_version,
+    dependency_url : script_json.dependency_url
   }
+  data.token_data = hashes.hash(token.project.contract.id, token.tokenId, token.hash)
+  data.token_script = token.project.script
   return data
 }
 
 // Query token generator html file
-async function token_generator(id, subgraph, contracts) {
-  const { tokens } = await graph.artblocks_subgraph(
+async function token_generator(id, subgraph, contracts, pbab) {
+  let { tokens } = await graph.artblocks_subgraph(
 `{
   tokens(where: { tokenId: "${id}"}) {
     project {
-      projectId
       scriptJSON
       script
       contract {
@@ -229,19 +189,13 @@ async function token_generator(id, subgraph, contracts) {
 }
 `, subgraph)
 
-  // Parse data
-  let html = ""
-  if (valid_response(tokens)) {
-    let token = tokens[0]
-    if (valid_contract(token.project, contracts)) {
-      let type = JSON.parse(token.project.scriptJSON).type
-      let token_data = hashes.hash(token.project.contract.id, token.tokenId, token.hash)
-      let dependency = versioning.dependency(type)
-      let script = token.project.script
-      html = build.template(type, token_data, script, dependency)
-    }
-  }
-  return html
+  let token = filter.tokens_by_contracts(tokens, contracts)[0]
+  let token_data = hashes.hash(token.project.contract.id, token.tokenId, token.hash)
+  let script_json = script.parse_json(token.project.scriptJSON, pbab)
+  let dependency = script_json.dependency
+  let dependency_url = script_json.dependency_url
+  let project_script = token.project.script
+  return build.template(dependency, dependency_url, project_script, token_data)
 }
 
 export default {

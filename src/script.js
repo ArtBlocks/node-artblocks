@@ -1,6 +1,6 @@
-// Content delivery network tags
-function dependency(type) {
-  switch(type) {
+// Content delivery network urls
+function dependency_url(dependency) {
+  switch(dependency) {
     case "p5js":
       return `"https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.min.js"`
     case "paperjs": 
@@ -26,8 +26,21 @@ function dependency(type) {
     case "tonejs" : 
       return `"https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.15/Tone.js"`
     default:
-      throw new Error("Unsupported dependency for requested script type.")
+      throw new Error("Unsupported dependency.")
   }
 }
 
-export default { dependency }
+// Script json can vary between contract types
+function parse_json(json, pbab=false) {
+  let x = JSON.parse(json)
+  return {
+    dependency : x.type,
+    dependency_version : x.version,
+    dependency_url : dependency_url(x.type),
+    interactive : x.interactive,
+    animation_length_sec : x.animationLengthInSeconds,
+    instructions : x.instructions
+  }
+}
+
+export default { parse_json }

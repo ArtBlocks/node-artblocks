@@ -28,11 +28,11 @@ function js(data="", script="") {
   return template
 }
 
-function p5js(data="", script="", dependency="") {
+function p5js(data="", script="", dependency_url="") {
   let template = `<html>
   <head>
     <meta charset="utf-8">
-    <script src=${dependency}></script>
+    <script src=${dependency_url}></script>
     <script>${data}</script>
     <script>${script}</script>
     <style type="text/css">
@@ -56,10 +56,10 @@ function p5js(data="", script="", dependency="") {
   return template
 }
 
-function threejs(data="", script="", dependency="") {
+function threejs(data="", script="", dependency_url="") {
   let template = `<html>
   <head>
-    <script src=${dependency}></script>
+    <script src=${dependency_url}></script>
     <meta charset="utf-8">
     <style type="text/css">
       body {
@@ -85,7 +85,7 @@ function threejs(data="", script="", dependency="") {
   return template
 }
 
-function processing(data="", script="", dependency="") {
+function processing(data="", script="", dependency_url="") {
   let template = `<html>
   <head>
     <meta charset="utf-8">
@@ -107,7 +107,7 @@ function processing(data="", script="", dependency="") {
     </style>
   </head>
   <body>
-    <script src=${dependency}></script>
+    <script src=${dependency_url}></script>
     <script>${data}</script>
     <script type="application/processing">${script}</script>
     <canvas></canvas>
@@ -116,10 +116,10 @@ function processing(data="", script="", dependency="") {
   return template
 }
 
-function regl(data="", script="", dependency=""){
+function regl(data="", script="", dependency_url=""){
   let template = `<html>
   <head>
-    <script src=${dependency}></script>
+    <script src=${dependency_url}></script>
     <script>${data}</script>
     <meta charset="utf-8">
     <style type="text/css">
@@ -146,10 +146,10 @@ function regl(data="", script="", dependency=""){
   return template
 }
 
-function tonejs(data="", script="", dependency="") {
+function tonejs(data="", script="", dependency_url="") {
   let template = `<html>
   <head>
-    <script src=${dependency}></script>
+    <script src=${dependency_url}></script>
     <meta charset="utf-8">
     <style type="text/css">
       body {
@@ -177,10 +177,10 @@ function tonejs(data="", script="", dependency="") {
   return template
 }
 
-function svg(data="", script="", dependency="") {
+function svg(data="", script="", dependency_url="") {
   let template = `<html>
   <head>
-    <script src=${dependency}></script>
+    <script src=${dependency_url}></script>
     <meta charset="utf-8">
     <style type="text/css">
       body {
@@ -206,11 +206,11 @@ function svg(data="", script="", dependency="") {
   return template
 }
 
-function aframe(data="", script="", dependency="") {
+function aframe(data="", script="", dependency_url="") {
   let template = `<html>
   <head>
     <script>${data}</script>
-    <script src=${dependency}></script>
+    <script src=${dependency_url}></script>
     <meta charset="utf-8">
     <style type="text/css">
       body {
