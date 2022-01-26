@@ -2,8 +2,8 @@
 There is a discrepancy between the way hashes are passed to projects
 
 Contracts
-V1 - { hashes: [hash_1, hash_2], ...}
-V2 - { hash: hash_1, ...}
+V0 - { hashes: [hash_1, hash_2], ...}
+V1 - { hash: hash_1, ...}
 
 The first version of the contract anticipated the use of an array of multiple token 
 hashes for each token id to increase the available entropy for a script to utilize. 
