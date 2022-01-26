@@ -44,7 +44,7 @@ class ArtBlocks {
     // Default contracts
     if (contracts.length == 0) {
       if (network == "mainnet") {
-        contracts = [address.artblocks.mainnet.v1, address.artblocks.mainnet.v2]
+        contracts = [address.artblocks.mainnet.v0, address.artblocks.mainnet.v1]
       } else {
         throw new Error("Must provide contracts for Ropsten projects.")
       }
