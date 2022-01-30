@@ -1,20 +1,15 @@
 # node-artblocks
 
+![npm](https://img.shields.io/npm/v/artblocks)
 [![CircleCI](https://circleci.com/gh/ArtBlocks/node-artblocks/tree/main.svg?style=svg)](https://circleci.com/gh/ArtBlocks/node-artblocks/tree/main)
 [![Node.js Package](https://github.com/ArtBlocks/node-artblocks/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/ArtBlocks/node-artblocks/actions/workflows/npm-publish.yml)
 
-An open source node package for reading on-chain Art Blocks data and recreating generative art projects. By default the package reads data via the [ArtBlocks Subgraph](https://thegraph.com/explorer/subgraph/artblocks/art-blocks). For those using other languages, use this package as a how-to guide for working directly with ArtBlocks on-chain data.
+An open source [node package](https://www.npmjs.com/package/artblocks) for reading on-chain Art Blocks data and recreating generative art projects. By default the package reads data via the [ArtBlocks Subgraph](https://thegraph.com/explorer/subgraph/artblocks/art-blocks). For those using other languages, use this package as a how-to guide for working directly with ArtBlocks on-chain data.
 
 ## Installation
 
 ```bash
-yarn install https://github.com/ArtBlocks/node-artblocks
-```
-
-This package is in *alpha development*. Once the methods become more stable it will be submitted to npm. In the meantime, download and install locally.
-
-```bash
-yarn install --save artblocks
+npm i artblocks
 ```
 
 ## Usage
