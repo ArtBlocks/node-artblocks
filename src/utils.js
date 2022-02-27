@@ -1,3 +1,7 @@
+function arr_to_str(arr) {
+  return "["+arr.map(x => '"'+x+'"').join(",")+"]"
+}
+
 function mul_by_dec(x, decimals=18) {
   return x*Math.pow(10, decimals)
 }
@@ -15,6 +19,7 @@ function eth_to_wei(x) {
 }
 
 export default {
+  arr_to_str,
   mul_by_dec,
   div_by_dec,
   wei_to_eth,

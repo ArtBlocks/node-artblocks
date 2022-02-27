@@ -89,7 +89,6 @@ describe("Ropsten", function() {
       return artblocks.projects().then(function(x) {
           expect(x.length).to.be.above(1)
           expect(x[1].id).to.equal(4)
-          expect(x[1].name).to.equal("Reflection")
           expect(x[1].artist).to.equal("Jeff Davis")
           expect(x[1].contract).to.equal("0x1cd623a86751d4c4f20c96000fec763941f098a2")
       })
@@ -100,7 +99,6 @@ describe("Ropsten", function() {
     it("should return metadata for a given project", function() {
       return artblocks.project_metadata(4).then(function(x) {
           expect(x.id).to.equal(4)
-          expect(x.name).to.equal("Reflection")
           expect(x.artist).to.equal("Jeff Davis")
           expect(x.contract).to.equal("0x1cd623a86751d4c4f20c96000fec763941f098a2")
       })
