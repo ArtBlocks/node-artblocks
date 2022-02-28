@@ -3,6 +3,7 @@
 ![npm](https://img.shields.io/npm/v/artblocks)
 [![CircleCI](https://circleci.com/gh/ArtBlocks/node-artblocks/tree/main.svg?style=svg)](https://circleci.com/gh/ArtBlocks/node-artblocks/tree/main)
 [![Node.js Package](https://github.com/ArtBlocks/node-artblocks/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/ArtBlocks/node-artblocks/actions/workflows/npm-publish.yml)
+![GitHub package.json version](https://img.shields.io/github/package-json/v/artblocks/node-artblocks?color=blue&label=development)
 
 An open source [node package](https://www.npmjs.com/package/artblocks) for reading on-chain Art Blocks data and recreating generative art projects. By default the package reads data via the [ArtBlocks Subgraph](https://thegraph.com/explorer/subgraph/artblocks/art-blocks). For those using other languages, use this package as a how-to guide for working directly with ArtBlocks on-chain data.
 
@@ -178,5 +179,50 @@ Promise {
     '     }\n' +
     '}\n' +
     ...
+}
+```
+
+### Custom Queries
+
+```javascript
+let x = `
+{
+  projects(
+    first: 5,
+    orderBy: projectId, 
+    orderDirection: desc, 
+    where: {curationStatus: "curated"}
+  ) 
+  {         
+    projectId
+    name
+    artistName
+    curationStatus
+  }
+}
+`
+```
+
+```javascript
+const response = artblocks.custom(x)
+```
+
+```javascript
+Promise {
+  projects: [
+    {
+      projectId: '225',
+      name: 'Vortex',
+      artistName: 'Jen Stark',
+      curationStatus: 'curated'
+    },
+    {
+      projectId: '215',
+      name: 'Gazers',
+      artistName: 'Matt Kane',
+      curationStatus: 'curated'
+    },
+    ...
+  ]
 }
 ```

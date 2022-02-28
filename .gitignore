@@ -20,3 +20,7 @@ coverage
 .directory
 .nfs*
 .fuse_hidden*
+
+# Custom
+dev/
+package-lock.json

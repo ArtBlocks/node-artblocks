@@ -2,14 +2,18 @@ import utils from './utils.js'
 import graph from './graph.js'
 import build from './build.js'
 import hashes from './hashes.js'
-import filter from './filter.js'
 import script from './script.js'
+
+// Query anything at all
+async function custom(x, subgraph) {
+  return await graph.artblocks_subgraph(x, subgraph)
+}
 
 // Query all available projects
 async function projects(subgraph, contracts, pbab) {
   let { projects } = await graph.artblocks_subgraph(
 `{
-  projects(first: 1000, orderBy: projectId) {
+  projects(first: 1000, orderBy: projectId, where: {contract_in: ${utils.arr_to_str(contracts)}} ) {
     projectId
     name
     artistName
@@ -20,7 +24,6 @@ async function projects(subgraph, contracts, pbab) {
 }
 `, subgraph)
 
-  projects = filter.projects_by_contracts(projects, contracts)
   let data = []
   for (let project of projects) {
     data.push({
@@ -37,7 +40,7 @@ async function projects(subgraph, contracts, pbab) {
 async function project_metadata(id, subgraph, contracts, pbab) {
   let { projects } = await graph.artblocks_subgraph(
 `{
-  projects(where: { projectId: "${id}" }) {
+  projects(where: {projectId: "${id}", contract_in: ${utils.arr_to_str(contracts)}}) {
     projectId
     name
     artistName
@@ -60,7 +63,7 @@ async function project_metadata(id, subgraph, contracts, pbab) {
 `, subgraph)
 
   let data = {}
-  let project = filter.projects_by_contracts(projects, contracts)[0]
+  let project = projects[0]
   data.id = parseInt(project.projectId, 10)
   data.name = project.name
   data.artist = project.artistName
@@ -83,7 +86,7 @@ async function project_metadata(id, subgraph, contracts, pbab) {
 async function project_script(id, subgraph, contracts, pbab) {
   let { projects } = await graph.artblocks_subgraph(
 `{
-  projects(where: { projectId: "${id}" }) {
+  projects(where: {projectId: "${id}", contract_in: ${utils.arr_to_str(contracts)}}) {
     projectId
     name
     scriptUpdatedAt
@@ -97,7 +100,7 @@ async function project_script(id, subgraph, contracts, pbab) {
 `, subgraph)
 
   let data = {}
-  let project = filter.projects_by_contracts(projects, contracts)[0]
+  let project = projects[0]
   let script_json = script.parse_json(project.scriptJSON, pbab)
   data.id = parseInt(project.projectId, 10)
   data.name = project.name
@@ -111,7 +114,7 @@ async function project_script(id, subgraph, contracts, pbab) {
 async function token_metadata(id, subgraph, contracts, pbab) {
   let { tokens } = await graph.artblocks_subgraph(
 `{
-  tokens(where: { tokenId: "${id}" }) {
+  tokens(where: {tokenId: "${id}", contract_in: ${utils.arr_to_str(contracts)}}) {
     project {
       projectId
       name
@@ -127,7 +130,7 @@ async function token_metadata(id, subgraph, contracts, pbab) {
 `, subgraph)
 
   let data = {}
-  let token = filter.tokens_by_contracts(tokens, contracts)[0]
+  let token = tokens[0]
   data.project_id = parseInt(token.project.projectId, 10)
   data.project_name = token.project.name
   data.token_id = parseInt(token.tokenId, 10)
@@ -140,7 +143,7 @@ async function token_metadata(id, subgraph, contracts, pbab) {
 async function token_script(id, subgraph, contracts, pbab) {
   let { tokens } = await graph.artblocks_subgraph(
 `{
-  tokens(where: { tokenId: "${id}"}) {
+  tokens(where: {tokenId: "${id}", contract_in: ${utils.arr_to_str(contracts)}}) {
     project {
       projectId
       scriptJSON
@@ -157,7 +160,7 @@ async function token_script(id, subgraph, contracts, pbab) {
 `, subgraph)
 
   let data = {}
-  let token = filter.tokens_by_contracts(tokens, contracts)[0]
+  let token = tokens[0]
   let script_json = script.parse_json(token.project.scriptJSON, pbab)
   data.token_id = parseInt(token.tokenId, 10)
   data.token_invocation = parseInt(token.invocation, 10)
@@ -175,7 +178,7 @@ async function token_script(id, subgraph, contracts, pbab) {
 async function token_generator(id, subgraph, contracts, pbab) {
   let { tokens } = await graph.artblocks_subgraph(
 `{
-  tokens(where: { tokenId: "${id}"}) {
+  tokens(where: {tokenId: "${id}", contract_in: ${utils.arr_to_str(contracts)}}) {
     project {
       scriptJSON
       script
@@ -189,7 +192,7 @@ async function token_generator(id, subgraph, contracts, pbab) {
 }
 `, subgraph)
 
-  let token = filter.tokens_by_contracts(tokens, contracts)[0]
+  let token = tokens[0]
   let token_data = hashes.hash(token.project.contract.id, token.tokenId, token.hash)
   let script_json = script.parse_json(token.project.scriptJSON, pbab)
   let dependency = script_json.dependency
@@ -199,6 +202,7 @@ async function token_generator(id, subgraph, contracts, pbab) {
 }
 
 export default {
+  custom,
   projects,
   project_metadata,
   project_script,

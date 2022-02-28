@@ -52,8 +52,13 @@ class ArtBlocks {
 
     this.api = api
     this.network = network
-    this.contracts = contracts
+    this.contracts = contracts.map(x => x.toLowerCase())
     this.pbab = pbab
+  }
+
+  // Query anything at all
+  custom(x) {
+    return query.custom(x, this.subgraph)
   }
 
   // Query all available projects
