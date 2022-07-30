@@ -11,20 +11,22 @@ function dependency_url(dependency) {
       return `"https://cdnjs.cloudflare.com/ajax/libs/aframe/1.2.0/aframe.min.js"`
     case "threejs": 
       return `"https://cdnjs.cloudflare.com/ajax/libs/three.js/r124/three.min.js"`
-    case "vox" : 
+    case "vox": 
       return ""
     case "megavox": 
       return ""
-    case "js" : 
+    case "js": 
       return ""
-    case "svg" : 
+    case "svg": 
       return ""
-    case "regl" : 
+    case "regl": 
       return `"https://cdnjs.cloudflare.com/ajax/libs/regl/2.1.0/regl.min.js"`
-    case "zdog" : 
+    case "zdog": 
       return `"https://unpkg.com/zdog@1/dist/zdog.dist.min.js"`
-    case "tonejs" : 
+    case "tonejs": 
       return `"https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.15/Tone.js"`
+    case "babylonjs":
+      return `"https://cdnjs.cloudflare.com/ajax/libs/babylonjs/5.0.0/babylon.js"`
     default:
       throw new Error("Unsupported dependency.")
   }

@@ -18,6 +18,8 @@ function template(dependency, dependency_url, project_script, token_data) {
       return templates.svg(token_data, project_script, dependency_url)
     case "a-frame":
       return templates.aframe(token_data, project_script, dependency_url)
+    case "babylonjs":
+      return templates.babylonjs(token_data, project_script, dependency_url)
     default:
       throw new Error(`Unsupported build template for requested script type: ${dependency}`)
   }
