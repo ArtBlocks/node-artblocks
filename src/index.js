@@ -3,16 +3,16 @@ import address from './address.js'
 
 // Most recent deployments of ArtBlocks on the graph
 const SUBGRAPH_MAINNET="https://api.thegraph.com/subgraphs/name/artblocks/art-blocks"
-const SUBGRAPH_ROPSTEN="https://api.thegraph.com/subgraphs/name/artblocks/art-blocks-artist-staging"
+const SUBGRAPH_GOERLI="https://api.thegraph.com/subgraphs/name/artblocks/art-blocks-artist-staging-goerli"
 
 function get_subgraph_api(network) {
   switch (network) {
     case "mainnet":
       return SUBGRAPH_MAINNET
-    case "ropsten":
-      return SUBGRAPH_ROPSTEN
+    case "goerli":
+      return SUBGRAPH_GOERLI
     default:
-      throw new Error("Supported networks include 'mainnet' and 'ropsten'.")
+      throw new Error("Supported networks include 'mainnet' and 'goerli'.")
   }
 }
 
@@ -31,12 +31,12 @@ class ArtBlocks {
       throw new Error("Supported APIs include 'thegraph'.")
     }
 
-    // ArtBlocks (mainnet/ropsten) or custom subgraph endpoint
+    // ArtBlocks (mainnet/goerli) or custom subgraph endpoint
     if (subgraph != "") {
       this.subgraph = subgraph
     } else {
-      if (!["mainnet", "ropsten"].includes(network)) {
-        throw new Error("Supported networks include 'mainnet' and 'ropsten'.")
+      if (!["mainnet", "goerli"].includes(network)) {
+        throw new Error("Supported networks include 'mainnet' and 'goerli'.")
       }
       this.subgraph = get_subgraph_api(network)
     }
@@ -46,7 +46,7 @@ class ArtBlocks {
       if (network == "mainnet") {
         contracts = [address.artblocks.mainnet.v0, address.artblocks.mainnet.v1]
       } else {
-        throw new Error("Must provide contracts for Ropsten projects.")
+        throw new Error("Must provide contracts for Goerli projects.")
       }
     }
 

@@ -237,6 +237,41 @@ function aframe(data="", script="", dependency_url="") {
   return template
 }
 
+function babylonjs(data="", script="", dependency_url="") {
+  let template = `<html>
+  <head>
+    <script>${data}</script>
+    <script src=${dependency_url}></script>
+    <meta charset="utf-8">
+    <style type="text/css">
+      html {
+        height: 100%;
+      }
+      body {
+        min-height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      canvas {
+        padding: 0;
+        margin: auto;
+        display: block;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="babylon-canvas"></canvas>
+  </body>
+  <script>${script}</script>
+</html>`
+  return template
+}
+
 export default {
   js,
   p5js,
@@ -245,5 +280,6 @@ export default {
   regl,
   tonejs,
   svg,
-  aframe
+  aframe,
+  babylonjs
 }

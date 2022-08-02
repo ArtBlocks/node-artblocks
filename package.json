@@ -1,6 +1,6 @@
 {
   "name": "artblocks",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A package for fetching on-chain ArtBlocks data.",
   "main": "src/index.js",
   "type": "module",
