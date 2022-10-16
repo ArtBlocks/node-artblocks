@@ -1,4 +1,4 @@
-function js(data = "", script = "") {
+function js(data="", script="") {
   let template = `<html>
   <head>
     <meta charset="utf-8">
@@ -24,11 +24,11 @@ function js(data = "", script = "") {
     <canvas></canvas>
     <script>${script}</script>
   </body>
-</html>`;
-  return template;
+</html>`
+  return template
 }
 
-function p5js(data = "", script = "", dependency_url = "") {
+function p5js(data="", script="", dependency_url="") {
   let template = `<html>
   <head>
     <meta charset="utf-8">
@@ -52,11 +52,11 @@ function p5js(data = "", script = "", dependency_url = "") {
       }
     </style>
   </head>
-</html>`;
-  return template;
+</html>`
+  return template
 }
 
-function threejs(data = "", script = "", dependency_url = "") {
+function threejs(data="", script="", dependency_url="") {
   let template = `<html>
   <head>
     <script src=${dependency_url}></script>
@@ -81,11 +81,11 @@ function threejs(data = "", script = "", dependency_url = "") {
   <body></body>
   <script>${data}</script>
   <script>${script}</script>
-</html>`;
-  return template;
+</html>`
+  return template
 }
 
-function processing(data = "", script = "", dependency_url = "") {
+function processing(data="", script="", dependency_url="") {
   let template = `<html>
   <head>
     <meta charset="utf-8">
@@ -112,11 +112,11 @@ function processing(data = "", script = "", dependency_url = "") {
     <script type="application/processing">${script}</script>
     <canvas></canvas>
   </body>
-</html>`;
-  return template;
+</html>`
+  return template
 }
 
-function regl(data = "", script = "", dependency_url = "") {
+function regl(data="", script="", dependency_url=""){
   let template = `<html>
   <head>
     <script src=${dependency_url}></script>
@@ -142,11 +142,11 @@ function regl(data = "", script = "", dependency_url = "") {
   <body>
     <script>${script}</script>
   </body>
-</html>`;
-  return template;
+</html>`
+  return template
 }
 
-function tonejs(data = "", script = "", dependency_url = "") {
+function tonejs(data="", script="", dependency_url="") {
   let template = `<html>
   <head>
     <script src=${dependency_url}></script>
@@ -173,19 +173,16 @@ function tonejs(data = "", script = "", dependency_url = "") {
   </body>
   <script>${data}</script>
   <script>${script}</script>
-</html>`;
-  return template;
+</html>`
+  return template
 }
 
-function svg(data = "", script = "", dependency_url = "") {
+function svg(data="", script="", dependency_url="") {
   let template = `<html>
   <head>
     <script src=${dependency_url}></script>
     <meta charset="utf-8">
     <style type="text/css">
-      html {
-        height: 100%;
-      }
       body {
         min-height: 100%;
         margin: 0;
@@ -200,17 +197,17 @@ function svg(data = "", script = "", dependency_url = "") {
         bottom: 0;
         left: 0;
         right: 0;
-      }    
+      }
     </style>
   </head>
   <body></body>
   <script>${data}</script>
   <script>${script}</script>
-</html>`;
-  return template;
+</html>`
+  return template
 }
 
-function aframe(data = "", script = "", dependency_url = "") {
+function aframe(data="", script="", dependency_url="") {
   let template = `<html>
   <head>
     <script>${data}</script>
@@ -237,11 +234,11 @@ function aframe(data = "", script = "", dependency_url = "") {
     <canvas></canvas>
   </body>
   <script>${script}</script>
-</html>`;
-  return template;
+</html>`
+  return template
 }
 
-function babylonjs(data = "", script = "", dependency_url = "") {
+function babylonjs(data="", script="", dependency_url="") {
   let template = `<html>
   <head>
     <script>${data}</script>
@@ -272,8 +269,8 @@ function babylonjs(data = "", script = "", dependency_url = "") {
     <canvas id="babylon-canvas"></canvas>
   </body>
   <script>${script}</script>
-</html>`;
-  return template;
+</html>`
+  return template
 }
 
 export default {
@@ -285,5 +282,5 @@ export default {
   tonejs,
   svg,
   aframe,
-  babylonjs,
-};
+  babylonjs
+}
