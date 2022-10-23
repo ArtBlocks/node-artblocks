@@ -33,7 +33,7 @@ function dependency_url(dependency) {
 }
 
 // Script json can vary between contract types
-function parse_json(json, pbab=false) {
+function parse_json(json) {
   let x = JSON.parse(json)
   return {
     dependency : x.type,

@@ -21,7 +21,7 @@ class ArtBlocks {
   constructor(api="thegraph", 
               network="mainnet",
               contracts=[], 
-              pbab=false,
+              flex=false,
               subgraph="") {
 
     // TODO
@@ -53,7 +53,7 @@ class ArtBlocks {
     this.api = api
     this.network = network
     this.contracts = contracts.map(x => x.toLowerCase())
-    this.pbab = pbab
+    this.flex = flex
   }
 
   // Query anything at all
@@ -63,32 +63,32 @@ class ArtBlocks {
 
   // Query all available projects
   projects() {
-    return query.projects(this.subgraph, this.contracts, this.pbab)
+    return query.projects(this.subgraph, this.contracts)
   }
   
   // Query project metadata
   project_metadata(id) {
-    return query.project_metadata(id, this.subgraph, this.contracts, this.pbab)
+    return query.project_metadata(id, this.subgraph, this.contracts)
   }
 
   // Query project raw script
   project_script(id) {
-    return query.project_script(id, this.subgraph, this.contracts, this.pbab)
+    return query.project_script(id, this.subgraph, this.contracts)
   }
 
   // Query token metadata
   token_metadata(id) {
-    return query.token_metadata(id, this.subgraph, this.contracts, this.pbab)
+    return query.token_metadata(id, this.subgraph, this.contracts)
   }
 
   // Query token raw script with hash and dependency tags
   token_script(id) {
-    return query.token_script(id, this.subgraph, this.contracts, this.pbab)
+    return query.token_script(id, this.subgraph, this.contracts, this.flex)
   }
 
   // Query token generator html file
   token_generator(id) {
-    return query.token_generator(id, this.subgraph, this.contracts, this.pbab)
+    return query.token_generator(id, this.subgraph, this.contracts, this.flex)
   }
 }
 
