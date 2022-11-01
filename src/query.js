@@ -1,7 +1,7 @@
 import utils from './utils.js'
 import graph from './graph.js'
 import build from './build.js'
-import hashes from './hashes.js'
+import metadata from './metadata.js'
 import script from './script.js'
 
 // Query anything at all
@@ -10,7 +10,7 @@ async function custom(x, subgraph) {
 }
 
 // Query all available projects
-async function projects(subgraph, contracts, pbab) {
+async function projects(subgraph, contracts) {
   let { projects } = await graph.artblocks_subgraph(
 `{
   projects(first: 1000, orderBy: projectId, where: {contract_in: ${utils.arr_to_str(contracts)}} ) {
@@ -37,7 +37,7 @@ async function projects(subgraph, contracts, pbab) {
 }
 
 // Query project metadata
-async function project_metadata(id, subgraph, contracts, pbab) {
+async function project_metadata(id, subgraph, contracts) {
   let { projects } = await graph.artblocks_subgraph(
 `{
   projects(where: {projectId: "${id}", contract_in: ${utils.arr_to_str(contracts)}}) {
@@ -83,7 +83,7 @@ async function project_metadata(id, subgraph, contracts, pbab) {
 }
 
 // Query project raw script
-async function project_script(id, subgraph, contracts, pbab) {
+async function project_script(id, subgraph, contracts) {
   let { projects } = await graph.artblocks_subgraph(
 `{
   projects(where: {projectId: "${id}", contract_in: ${utils.arr_to_str(contracts)}}) {
@@ -101,7 +101,7 @@ async function project_script(id, subgraph, contracts, pbab) {
 
   let data = {}
   let project = projects[0]
-  let script_json = script.parse_json(project.scriptJSON, pbab)
+  let script_json = script.parse_json(project.scriptJSON)
   data.id = parseInt(project.projectId, 10)
   data.name = project.name
   data.last_updated = project.scriptUpdatedAt
@@ -111,7 +111,7 @@ async function project_script(id, subgraph, contracts, pbab) {
 }
 
 // Query token metadata
-async function token_metadata(id, subgraph, contracts, pbab) {
+async function token_metadata(id, subgraph, contracts) {
   let { tokens } = await graph.artblocks_subgraph(
 `{
   tokens(where: {tokenId: "${id}", contract_in: ${utils.arr_to_str(contracts)}}) {
@@ -140,7 +140,7 @@ async function token_metadata(id, subgraph, contracts, pbab) {
 }
 
 // Query token raw script with hash and dependency tags
-async function token_script(id, subgraph, contracts, pbab) {
+async function token_script(id, subgraph, contracts, flex) {
   let { tokens } = await graph.artblocks_subgraph(
 `{
   tokens(where: {tokenId: "${id}", contract_in: ${utils.arr_to_str(contracts)}}) {
@@ -150,6 +150,12 @@ async function token_script(id, subgraph, contracts, pbab) {
       script
       contract {
         id
+        preferredIPFSGateway
+        preferredArweaveGateway
+      }
+      externalAssetDependencies {
+        cid
+        dependencyType
       }
     }
     tokenId
@@ -161,7 +167,7 @@ async function token_script(id, subgraph, contracts, pbab) {
 
   let data = {}
   let token = tokens[0]
-  let script_json = script.parse_json(token.project.scriptJSON, pbab)
+  let script_json = script.parse_json(token.project.scriptJSON)
   data.token_id = parseInt(token.tokenId, 10)
   data.token_invocation = parseInt(token.invocation, 10)
   data.token_dependencies = {
@@ -169,13 +175,21 @@ async function token_script(id, subgraph, contracts, pbab) {
     dependency_version : script_json.dependency_version,
     dependency_url : script_json.dependency_url
   }
-  data.token_data = hashes.hash(token.project.contract.id, token.tokenId, token.hash)
+  data.token_data = metadata.token_data(
+    token.project.contract.id, 
+    token.hash, 
+    token.tokenId, 
+    flex, 
+    token.project.contract.preferredIPFSGateway, 
+    token.project.contract.preferredArweaveGateway, 
+    token.project.externalAssetDependencies
+  )
   data.token_script = token.project.script
   return data
 }
 
 // Query token generator html file
-async function token_generator(id, subgraph, contracts, pbab) {
+async function token_generator(id, subgraph, contracts, flex) {
   let { tokens } = await graph.artblocks_subgraph(
 `{
   tokens(where: {tokenId: "${id}", contract_in: ${utils.arr_to_str(contracts)}}) {
@@ -184,6 +198,12 @@ async function token_generator(id, subgraph, contracts, pbab) {
       script
       contract {
         id
+        preferredIPFSGateway
+        preferredArweaveGateway
+      }
+      externalAssetDependencies {
+        cid
+        dependencyType
       }
     }
     tokenId
@@ -193,8 +213,16 @@ async function token_generator(id, subgraph, contracts, pbab) {
 `, subgraph)
 
   let token = tokens[0]
-  let token_data = hashes.hash(token.project.contract.id, token.tokenId, token.hash)
-  let script_json = script.parse_json(token.project.scriptJSON, pbab)
+  let token_data = metadata.token_data(
+    token.project.contract.id, 
+    token.hash, 
+    token.tokenId, 
+    flex, 
+    token.project.contract.preferredIPFSGateway, 
+    token.project.contract.preferredArweaveGateway, 
+    token.project.externalAssetDependencies
+  )
+  let script_json = script.parse_json(token.project.scriptJSON, flex)
   let dependency = script_json.dependency
   let dependency_url = script_json.dependency_url
   let project_script = token.project.script

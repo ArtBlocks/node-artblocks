@@ -19,11 +19,14 @@ npm i artblocks
 import ArtBlocks from 'artblocks'
 
 // Ethereum mainnet
-let artblocks = new ArtBlocks("thegraph", "mainnet");
+let artblocks = new ArtBlocks("thegraph", "mainnet")
 
 // Artist staging projects
 // Please refrain from sharing these projects publicly
-let artblocks = new ArtBlocks("thegraph", "ropsten");
+let artblocks = new ArtBlocks("thegraph", "goerli")
+
+// Flex contracts
+let artblocks = new ArtBlocks("thegraph", "goerli", contracts=["<contract_address>"] flex=true)
 ```
 
 ## Methods

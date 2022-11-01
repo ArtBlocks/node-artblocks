@@ -1,6 +1,7 @@
 import templates from './templates.js'
 
 function template(dependency, dependency_url, project_script, token_data) {
+  token_data = `let tokenData = ${JSON.stringify(token_data)}`
   switch(dependency) {
     case "js":
       return templates.js(token_data, project_script)
