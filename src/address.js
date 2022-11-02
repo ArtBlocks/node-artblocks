@@ -1,3 +1,4 @@
+// v2 is not present as the v2 spec was only applicable for Engine
 const artblocks = {
   "mainnet": {
    "v0": "0x059edd72cd353df5106d2b9cc5ab83a52287ac3a",
