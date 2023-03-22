@@ -4,6 +4,7 @@
 [![CircleCI](https://circleci.com/gh/ArtBlocks/node-artblocks/tree/main.svg?style=svg)](https://circleci.com/gh/ArtBlocks/node-artblocks/tree/main)
 [![Node.js Package](https://github.com/ArtBlocks/node-artblocks/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/ArtBlocks/node-artblocks/actions/workflows/npm-publish.yml)
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/artblocks/node-artblocks?color=blue&label=development)
+[![GitPOAPs](https://public-api.gitpoap.io/v1/repo/ArtBlocks/node-artblocks/badge)](https://www.gitpoap.io/gh/ArtBlocks/node-artblocks)
 
 An open source [node package](https://www.npmjs.com/package/artblocks) for reading on-chain Art Blocks data and recreating generative art projects. By default the package reads data via the [ArtBlocks Subgraph](https://thegraph.com/explorer/subgraph/artblocks/art-blocks). For those using other languages, use this package as a how-to guide for working directly with ArtBlocks on-chain data.
 
